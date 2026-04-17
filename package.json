@@ -1,25 +1,27 @@
 {
-  "name": "augmend-sales-bot",
+  "name": "augmend-crm-bot",
   "version": "1.0.0",
-  "description": "AugMend Health Slack CRM assistant — syncs Notion pipeline to Slack and answers sales queries via Claude",
+  "description": "AugMend CRM Bot — Slack bot for pipeline management via Notion",
   "main": "app.js",
-  "engines": {
-    "node": ">=18.0.0"
-  },
   "scripts": {
-    "start": "node app.js",
-    "dev": "node --watch app.js",
-    "test": "node --test tests/"
+    "start":  "node app.js",
+    "dev":    "node app.js",
+    "setup":  "node scripts/setup.js",
+    "test":   "jest --passWithNoTests"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.24.0",
-    "@notionhq/client": "^2.2.15",
-    "@slack/bolt": "^3.19.0",
-    "dotenv": "^16.4.5",
-    "node-schedule": "^2.1.1",
-    "winston": "^3.13.0"
+    "@anthropic-ai/sdk":  "^0.20.0",
+    "@notionhq/client":  "^2.2.15",
+    "@slack/bolt":       "^3.17.0",
+    "@slack/web-api":    "^7.0.0",
+    "dotenv":            "^16.4.5",
+    "node-schedule":     "^2.1.1",
+    "winston":           "^3.11.0"
   },
-  "devDependencies": {},
-  "license": "UNLICENSED",
-  "private": true
+  "devDependencies": {
+    "jest": "^29.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
 }
