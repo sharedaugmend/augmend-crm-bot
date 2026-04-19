@@ -1,11 +1,10 @@
 'use strict';
 require('dotenv').config();
 
-const { App }        = require('@slack/bolt');
-const logger         = require('./lib/logger');
-const slack          = require('./lib/slack');
+const { App }           = require('@slack/bolt');
+const logger            = require('./lib/logger');
+const slack             = require('./lib/slack');
 const { handleMessage } = require('./lib/claude');
-const { startScheduler } = require('./jobs/syncScheduler');
 
 const REQUIRED_ENV = [
   'SLACK_BOT_TOKEN',
@@ -13,6 +12,7 @@ const REQUIRED_ENV = [
   'SLACK_SIGNING_SECRET',
   'NOTION_API_KEY',
   'ANTHROPIC_API_KEY',
+  'PROSPECTIVE_CUSTOMERS_CHANNEL_ID',
 ];
 for (const key of REQUIRED_ENV) {
   if (!process.env[key]) {
@@ -21,15 +21,20 @@ for (const key of REQUIRED_ENV) {
   }
 }
 
-if (!process.env.PROSPECTIVE_CUSTOMERS_CHANNEL_ID) {
-  logger.warn('PROSPECTIVE_CUSTOMERS_CHANNEL_ID not set — pipeline digest will be skipped until set');
-}
-
 const app = new App({
   token:         process.env.SLACK_BOT_TOKEN,
   signingSecret: process.env.SLACK_SIGNING_SECRET,
   socketMode:    true,
   appToken:      process.env.SLACK_APP_TOKEN,
+  clientOptions: { timeout: 20_000 },
+});
+
+app.error(async (err) => {
+  logger.error(`Bolt error: ${err.stack || err.message}`);
+});
+
+process.on('unhandledRejection', (reason) => {
+  logger.error(`unhandledRejection: ${reason?.stack || reason}`);
 });
 
 slack.init(app.client);
@@ -41,7 +46,7 @@ app.event('message', async ({ event, say }) => {
     const reply = await handleMessage(event.text || '', event.user);
     await say(reply);
   } catch (err) {
-    logger.error(`DM handler error: ${err.message}`);
+    logger.error(`DM handler error: ${err.stack || err.message}`);
     await say('Something went wrong. Please try again.');
   }
 });
@@ -53,7 +58,7 @@ app.event('app_mention', async ({ event, say }) => {
     const reply = await handleMessage(text, event.user);
     await say({ text: reply, thread_ts: event.thread_ts || event.ts });
   } catch (err) {
-    logger.error(`Mention handler error: ${err.message}`);
+    logger.error(`Mention handler error: ${err.stack || err.message}`);
     await say({ text: 'Something went wrong. Please try again.', thread_ts: event.ts });
   }
 });
@@ -61,5 +66,4 @@ app.event('app_mention', async ({ event, say }) => {
 (async () => {
   await app.start();
   logger.info('AugMend CRM Bot is running (Socket Mode)');
-  startScheduler();
 })();
