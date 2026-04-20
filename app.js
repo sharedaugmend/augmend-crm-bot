@@ -4,6 +4,7 @@ require('dotenv').config();
 const { App }           = require('@slack/bolt');
 const logger            = require('./lib/logger');
 const slack             = require('./lib/slack');
+const homeTab           = require('./lib/homeTab');
 const { handleMessage } = require('./lib/claude');
 
 const REQUIRED_ENV = [
@@ -49,6 +50,11 @@ app.event('message', async ({ event, say }) => {
     logger.error(`DM handler error: ${err.stack || err.message}`);
     await say('Something went wrong. Please try again.');
   }
+});
+
+app.event('app_home_opened', async ({ event, client }) => {
+  if (event.tab !== 'home') return;
+  await homeTab.publish(client, event.user);
 });
 
 app.event('app_mention', async ({ event, say }) => {
