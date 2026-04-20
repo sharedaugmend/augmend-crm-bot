@@ -4,19 +4,21 @@
   "description": "AugMend CRM Bot — Slack bot for pipeline management via Notion",
   "main": "app.js",
   "scripts": {
-    "start":     "node app.js",
-    "dev":       "node app.js",
+    "start": "node app.js",
+    "dev": "node app.js",
     "bootstrap": "node scripts/bootstrap.js",
-    "dry-run":   "node scripts/bootstrap.js --dry-run",
-    "test":      "jest --passWithNoTests"
+    "dry-run": "node scripts/bootstrap.js --dry-run",
+    "test": "jest --passWithNoTests"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.20.0",
-    "@notionhq/client":  "^2.2.15",
-    "@slack/bolt":       "^3.17.0",
-    "@slack/web-api":    "^7.0.0",
-    "dotenv":            "^16.4.5",
-    "winston":           "^3.11.0"
+    "@notionhq/client": "^2.2.15",
+    "@slack/bolt": "^3.17.0",
+    "@slack/web-api": "^7.0.0",
+    "dotenv": "^16.4.5",
+    "googleapis": "^171.4.0",
+    "officeparser": "^6.1.0",
+    "winston": "^3.11.0"
   },
   "devDependencies": {
     "jest": "^29.0.0"
