@@ -34,8 +34,8 @@ module.exports = {
   'montreal-general':                              'montreal',
   'utsouthwest-pain-medicine':                     'utsouthwest',
   'massachusetts-general-hospital':                'mass-general',
-  'hero-brain-health':                             'jlc-services',
+  'hero-brain-health':                             'hero-brain',
   'mike-kritzer-private-clinic':                   'mike-clinic',
-  'la-childrens-hospital':                         'la-childrens-irb',
+  'la-childrens-hospital':                         'la-childrens',
   'einstein-montefiore-hospital-pmr':              'montefiore',
 };
